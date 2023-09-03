@@ -89,7 +89,7 @@ resource "yandex_compute_instance" "host1" {
   }
 
   ## Копирование файлов #1
-  ## Копируем каталога с ssh-ключами из локального хоста на создаваемую ВМ (для дальнейшего создания учетной записи "devops")
+  ## Копируем каталог с ssh-ключами из локального хоста на создаваемую ВМ (для дальнейшего создания учетной записи "devops")
   provisioner "file" {
     source      = local.ssh_keys_dir                # "/home/devops/.ssh/"
     destination = "/tmp"
@@ -150,6 +150,9 @@ resource "yandex_compute_instance" "host1" {
 
   } ## << "provisioner remote-exec"
 
+  ##--Возможно, в данном случае, применение Ansible может быть не обосновано, 
+  ##  т.к появляется дополнительный слой сложности от которого можно избавится применяя обычные шелл-crhbgns
+  ##
   #provisioner "local-exec" {
   #  ##--Применяем Ansible Плейбук "nginx" к инстансу "host1"
   #  ##  example: ansible-playbook -i 84.252.139.210, -u ubuntu -e host_public_ip_phpfpm=158.160.28.188 ./ansible/deploy_nginx.yml
@@ -160,10 +163,10 @@ resource "yandex_compute_instance" "host1" {
 }
 
 
-## В Сервисе "Virtual Private Cloud" (vpc) Создаем Сеть "acme-net" и подсеть "acme-net-sub1"
-## *если в облаке уже существует такая сеть созданная ранее, то возникнет ошибка изз превышения квоты на кол-во сетей (не более 2х включая "default" сеть)
+##--В Сервисе "Virtual Private Cloud" (vpc) Создаем Сеть "acme-net" и подсеть "acme-net-sub1"
+##  *если в облаке уже существует такая сеть созданная ранее, то возникнет ошибка изза превышения квоты на кол-во сетей (не более 2х включая "default" сеть)
 ##      rpc error: code = ResourceExhausted desc = Quota limit vpc.networks.count exceeded
-## *такая сеть уже была создана ранее в предыдущем проекте, поэтому ее создание НЕ требуется и блок закомментирован
+##  *такая сеть уже была создана ранее в предыдущем проекте, поэтому ее создание НЕ требуется и блок закомментирован
 #
 #resource "yandex_vpc_network" "net1" {
 #  name = "acme-net" # имя сети так она будет отображаться в веб-консоли (чуть выше "net1" - это псевдоним ресурса);
