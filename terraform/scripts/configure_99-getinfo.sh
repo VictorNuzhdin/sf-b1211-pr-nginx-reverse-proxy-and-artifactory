@@ -1,13 +1,13 @@
 #!/bin/sh
 
 SCRIPTS_PATH=/home/ubuntu/scripts
-LOG_PATH=$SCRIPTS_PATH/configure_77-getinfo.log
+LOG_PATH=$SCRIPTS_PATH/configure_99-getinfo.log
 NEW_USER_LOGIN=devops
 
 
 
 
-##--STEP#77 :: Collecting Configuration Info
+##--STEP#99 :: Collecting Configuration Info
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] :: Jobs started.." >> $LOG_PATH
 echo "-----------------------------------------------------------------------------" >> $LOG_PATH
 echo "" >> $LOG_PATH

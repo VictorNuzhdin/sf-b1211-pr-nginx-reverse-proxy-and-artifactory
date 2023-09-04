@@ -18,7 +18,7 @@ terraform {
 variable "yc_token" { type=string }
 
 locals {
-  ## token-created: 2023.04.20 10:00
+  ## token-created: 2023.04.20 10:00 (срок жизни: 12 часов)
   ## $ export TF_VAR_yc_token=$(yc iam create-token) && echo $TF_VAR_yc_token
   #
   iam_token        = "${var.yc_token}"
