@@ -75,3 +75,7 @@ $ terraform destroy -auto-approve
 Скриншот2: Результат перехода по URL /cicd (https-сайт) <br>
 ![screen](_screens/gateway__jenkins.png?raw=true)
 <br>
+
+Скриншот3: HTTP/SSL сертификат для сайта "jenkins.dotspace.ru" выданный SA "Lets Encrypt" <br>
+![screen](_screens/gateway__jenkins__cert.png?raw=true)
+<br>
