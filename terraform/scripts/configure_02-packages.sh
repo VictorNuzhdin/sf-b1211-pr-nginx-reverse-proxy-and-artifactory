@@ -43,6 +43,13 @@ mc --version | head -n 1 >> $LOG_PATH
 whereis mc >> $LOG_PATH
 echo "" >> $LOG_PATH
 
+echo '## Installing Tree package..' >> $LOG_PATH
+sudo apt install -y tree
+echo "" >> $LOG_PATH
+tree --version >> $LOG_PATH
+whereis tree >> $LOG_PATH
+echo "" >> $LOG_PATH
+
 echo "" >> $LOG_PATH
 echo "-----------------------------------------------------------------------------" >> $LOG_PATH
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] :: Jobs done!" >> $LOG_PATH
