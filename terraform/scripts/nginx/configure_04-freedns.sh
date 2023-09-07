@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SCRIPTS_PATH=/home/ubuntu/scripts
-LOG_PATH=$SCRIPTS_PATH/configure_77-freedns.log
+LOG_PATH=$SCRIPTS_PATH/configure_04-freedns.log
 FREEDNS_CLIENT_SCRIPT=freeDNSupdateIP.sh
 
 
@@ -40,7 +40,6 @@ echo 'echo $TS -- $API_CALL_RESULT >> $LOG_PATH 2>/dev/null' >> $SCRIPTS_PATH/$F
 echo '' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 ##<--end_script_body
 
-
 echo '## Step02 - Adding script to crontab for onBoot execution..' >> $LOG_PATH
 sudo crontab -l > crontab_root.backup
 echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin" >> cron_tmp
@@ -52,10 +51,8 @@ sudo systemctl status cron | grep Active | awk '{$1=$1;print}' >> $LOG_PATH
 sudo crontab -l | tail -n 2 >> $LOG_PATH
 echo '' >> $LOG_PATH
 
-
 echo '## Step03 - Execute script immediately..' >> $LOG_PATH
 $SCRIPTS_PATH/freeDNSupdateIP.sh
-
 
 echo '## Step04 - Show script log..' >> $LOG_PATH
 cat $SCRIPTS_PATH/freeDNSupdateIP.log | tail -n 2

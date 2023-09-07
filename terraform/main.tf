@@ -100,7 +100,7 @@ resource "yandex_compute_instance" "host1" {
       host = yandex_compute_instance.host1.network_interface.0.nat_ip_address
       agent = false
       private_key = file(local.ssh_privkey_path)    # file("/home/devops/.ssh/id_ed25519")
-      timeout = "2m"
+      timeout = "3m"
     }
   }
 
@@ -112,8 +112,20 @@ resource "yandex_compute_instance" "host1" {
     #destination = "/tmp/configure_nginx.sh"
     #
     ##-копируем весь каталог со скриптами
-    source      = "scripts"
-    destination = "/home/ubuntu"
+    #source      = "scripts"
+    #destination = "/home/ubuntu"          # /home/ubuntu/scripts/..скрипты -или- /home/ubuntu/scripts/nginx/ + /home/ubuntu/scripts/artifactory/
+    #..другие пути
+    #source      = "scripts/nginx"
+    #destination = "/home/ubuntu/"         # /home/ubuntu/nginx/..скрипты
+    #..другие пути
+    #source      = "scripts/nginx"
+    #destination = "/home/ubuntu"          # /home/ubuntu/nginx/..скрипты
+    #..другие пути
+    #source      = "scripts/nginx"
+    #destination = "/home/ubuntu/scripts"   # Upload failed: scp: /home/ubuntu/scripts: Not a directory
+    #..другие пути
+    source      = "scripts/nginx"
+    destination = "/home/ubuntu/scripts/"   # /home/ubuntu/scripts/..скрипты
 
     connection {
       type = "ssh"
@@ -121,7 +133,7 @@ resource "yandex_compute_instance" "host1" {
       host = yandex_compute_instance.host1.network_interface.0.nat_ip_address
       agent = false
       private_key = file(local.ssh_privkey_path)
-      timeout = "2m"
+      timeout = "4m"
     }
   }
 
@@ -135,7 +147,7 @@ resource "yandex_compute_instance" "host1" {
       host = yandex_compute_instance.host1.network_interface.0.nat_ip_address
       agent = false
       private_key = file(local.ssh_privkey_path)
-      timeout = "1m"
+      timeout = "4m"
     }
     ##..блок выполнения команд (1 команда выполняется за ssh 1 подключение)
     #inline = [
@@ -143,6 +155,11 @@ resource "yandex_compute_instance" "host1" {
     #  "/tmp/configure_nginx.sh"
     #]
     ##..лучше сделаем main/master шелл-скрипт который будет запускать остальные
+    #inline = [
+    #  "chmod +x /home/ubuntu/scripts/configure_00-main.sh",
+    #  "/home/ubuntu/scripts/configure_00-main.sh"
+    #]
+    ##..изменен путь разещения скриптов на целевой ВМ
     inline = [
       "chmod +x /home/ubuntu/scripts/configure_00-main.sh",
       "/home/ubuntu/scripts/configure_00-main.sh"

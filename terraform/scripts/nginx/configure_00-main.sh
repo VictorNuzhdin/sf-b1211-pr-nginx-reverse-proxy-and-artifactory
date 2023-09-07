@@ -21,11 +21,14 @@ sudo bash $SCRIPTS_PATH/configure_02-packages.sh
 chmod +x $SCRIPTS_PATH/configure_03-nginx.sh
 sudo bash $SCRIPTS_PATH/configure_03-nginx.sh
 #
+chmod +x $SCRIPTS_PATH/configure_04-freedns.sh
+sudo bash $SCRIPTS_PATH/configure_04-freedns.sh
+#
+chmod +x $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
+sudo bash $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
+#
 chmod +x $SCRIPTS_PATH/configure_66-firewall.sh
 sudo bash $SCRIPTS_PATH/configure_66-firewall.sh
-#
-chmod +x $SCRIPTS_PATH/configure_77-freedns.sh
-sudo bash $SCRIPTS_PATH/configure_77-freedns.sh
 #
 chmod +x $SCRIPTS_PATH/configure_99-getinfo.sh
 sudo bash $SCRIPTS_PATH/configure_99-getinfo.sh

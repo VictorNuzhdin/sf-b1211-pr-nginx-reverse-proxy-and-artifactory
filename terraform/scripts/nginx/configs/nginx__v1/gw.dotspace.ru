@@ -4,7 +4,8 @@ server {
     root /var/www/gw.dotspace.ru/html;
     index index.html;
 
-    server_name gw.dotspace.ru www.gw.dotspace.ru;
+    # server_name gw.dotspace.ru www.gw.dotspace.ru;
+    server_name gw.dotspace.ru;
 
     location / {
         try_files $uri $uri/ =404;

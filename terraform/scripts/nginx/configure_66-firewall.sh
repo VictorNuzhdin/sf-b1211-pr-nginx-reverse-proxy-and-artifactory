@@ -12,9 +12,15 @@ echo "[$(date +'%Y-%m-%d %H:%M:%S')] :: Jobs started.." >> $LOG_PATH
 echo "-----------------------------------------------------------------------------" >> $LOG_PATH
 echo "" >> $LOG_PATH
 
-echo '## Step00 - Set default rule..' >> $LOG_PATH
+echo '## Step00.1 - Set default ruleset..' >> $LOG_PATH
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
+
+echo '## Step00.2 - Disable IPv6 processing/rules..' >> $LOG_PATH
+sudo cat /etc/default/ufw | grep "IPV6=" >> $LOG_PATH
+sudo sed -i 's/IPV6=yes/IPV6=no/g' /etc/default/ufw
+sudo cat /etc/default/ufw | grep "IPV6=" >> $LOG_PATH
+echo "" >> $LOG_PATH
 
 echo '## Step01 - Allow incoming SSH..' >> $LOG_PATH
 #sudo ufw allow 'OpenSSH'

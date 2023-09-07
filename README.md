@@ -17,6 +17,12 @@ Terraform IaC-конфигурация для создания 2х виртуа�
 ### 02. История изменений (не детальная, сверху - новые)
 
 ```bash
+2023.09.07 :: Добавлены/Изменены скрипты настройки ВМ1:
+    - скрипт "configure_05-ssl-letsencrypt.sh" (выполняет установку LetsEncrypt "certbot" для запроса SSL сертификата)
+    - скрипт "requesLetsEncryptCert.sh" (циклически проверяет доступность сайта по доменному имени http://gw.dotspace.ru и запрашивает выпуск LetsEncrypt сертификата)
+    - незначительные изменения цифровых идентификаторов в именах скриптов
+    - в результате Nginx сервер становится доступен по URL https://gw.dotspace.ru с валидным SSL сертификатом сроком на 90 дней
+
 2023.09.05 :: Добавлены/Изменены скрипты настройки ВМ1:
     - скрипт "configure_03-nginx.sh"    (добавлена конфигурация виртуального сайта [gw.dotspace.ru])
     - добавлена index.html страница с приветствием
@@ -59,23 +65,36 @@ $ ssh <vm1_nginx_external_ip>    ## examples: ssh 158.160.23.86  -or-  ssh devop
 $ ping -c 1 gw.dotspace.ru       ## 64 bytes from 158.160.23.86 (158.160.23.86): icmp_seq=1 ttl=63 time=0.606 ms
 $ ssh gw.dotspace.ru
 
-browser: http://gw.dotspace.ru   ## Welcome to nginx!
-
 #3
+$ curl -s https://gw.dotspace.ru | grep title | awk '{$1=$1;print}'  ## <title>Welcome | gw.dotspace.ru</title>
+
+browser: https://gw.dotspace.ru  ## Welcome to [gw.dotspace.ru] (Reverse-Proxy Gateway) --> View site information - Connection is secure - Certificate is valid
+
+#4
 $ terraform destroy -auto-approve
 ```
 
 
 ### 05. Результат работы веб-приложения
 
-Скриншот1: Основная/Домашняя страница Шлюза/ReverseProxy <br>
+Скриншот1: Основная/Домашняя страница Шлюза/ReverseProxy (без https) <br>
 ![screen](_screens/gateway__index-page__v1.png?raw=true)
 <br>
 
-Скриншот2: Результат перехода по URL /cicd (https-сайт) <br>
+Скриншот2: Основная/Домашняя страница Шлюза/ReverseProxy (с https) <br>
+![screen](_screens/gateway__index-page__v1_https.png?raw=true)
+<br>
+
+Скриншот3: HTTP/SSL сертификат для сайта "gw.dotspace.ru" выданный SA "Lets Encrypt" <br>
+![screen](_screens/gateway__self__cert_1.png?raw=true)
+<br>
+![screen](_screens/gateway__self__cert_2.png?raw=true)
+<br>
+
+Скриншот4: Результат перехода по URL /cicd (https-сайт) <br>
 ![screen](_screens/gateway__jenkins.png?raw=true)
 <br>
 
-Скриншот3: HTTP/SSL сертификат для сайта "jenkins.dotspace.ru" выданный SA "Lets Encrypt" <br>
+Скриншот5: HTTP/SSL сертификат для сайта "jenkins.dotspace.ru" выданный SA "Lets Encrypt" <br>
 ![screen](_screens/gateway__jenkins__cert.png?raw=true)
 <br>
