@@ -31,7 +31,6 @@ locals {
   net_sub_id       = "e2lcqv479p4bicmd33i1"
   vm_default_login = "ubuntu"                           # Ubuntu image default username;
   ssh_keys_dir     = "/home/devops/.ssh"                # Каталог размещения ключевой ssh-пары на локальном хосте
-  #ssh_pubkey_path = "~/.ssh/id_ed25519.pub"            # Set a full path of SSH public and private keys;
   ssh_pubkey_path  = "/home/devops/.ssh/id_ed25519.pub"
   ssh_privkey_path = "/home/devops/.ssh/id_ed25519"
 }
@@ -44,26 +43,27 @@ provider "yandex" {
   zone      = local.access_zone
 }
 
-
-##--Создаем VM1 (Ubuntu 22.04, x2 vCPU, x2 GB RAM, x20 GB HDD) -- nginx хост (зависит от phpfpm)
+##----------------------------------------------------------------------------------------
+##--Создаем VM1 (Ubuntu 22.04, x2 vCPU, x2 GB RAM, x8 GB HDD) -- nginx хост
 resource "yandex_compute_instance" "host1" {
   name        = "nginx"             # имя ВМ;
   hostname    = "gw"                # сетевое имя ВМ (имя хоста);
   platform_id = "standard-v2"       # семейство облачной платформы ВМ (влияет на тип и параметры доступного для выбора CPU);
   zone        = local.access_zone   # зона доступности (размещение ВМ в конкретном датацентре);
 
+  ## Конфигурация виртуальных CPU и RAM
   resources {
     cores         = 2 # колво виртуальных ядер vCPU;
     memory        = 2 # размер оперативной памяти, ГБ;
     core_fraction = 5 # % гарантированной доли CPU (самый дешевый вариант, при 100% вся процессорная мощность резервируется для клиента);
   }
 
-  ## Делаем ВМ прерываемой (делает ВМ дешевле на 50% но ее в любой момент могут вырубить что происходит не часто)
+  ## Конфигурация технического обслуживания по расписанию
   scheduling_policy {
-    preemptible = true
+    preemptible = true  # делаем ВМ прерываемой (ВМ становится дешевле на 50%, но ее в любой момент могут вырубить что происходит не часто)
   }
 
-  ## Загрузочный образ на основе которого создается ВМ (из Yandex)
+  ## Конфигурация загрузочного диска (включает образ на основе которого создается ВМ (из Yandex.Cloud Marketplace)
   boot_disk {
     initialize_params {
       image_id    = "fd8clogg1kull9084s9o"    # версия ОС: Ubuntu 22.04 LTS (family_id: ubuntu-2204-lts, image_id: fd8clogg1kull9084s9o);
@@ -73,7 +73,7 @@ resource "yandex_compute_instance" "host1" {
     }
   }
 
-  ## Параметры локального сетевого интерфейса
+  ## Конфигурация сетевого интерфейса
   network_interface {
     #subnet_id = yandex_vpc_subnet.subnet1.id  # идентификатор подсети в которую будет смотреть интерфейс;
     subnet_id = local.net_sub_id               # подключаемся к уже существующей подсети
@@ -81,7 +81,7 @@ resource "yandex_compute_instance" "host1" {
     nat        = true                          # создаем интерфейс смотрящий в публичную сеть;
   }
 
-  ## Данные авторизации пользователей на создаваемых ВМ
+  ## Конфигурация авторизации пользователей на создаваемой ВМ
   metadata = {
     serial-port-enable = 0                                     # активация серийной консоли чтоб можно было подключиться к ВМ через веб-интерфейс (0, 1);
     ssh-keys = "ubuntu:${file("${local.ssh_pubkey_path}")}"    # передаем публичный ssh ключ который будет добавлен на ВМ в /home/ubuntu/.ssh/authorized_keys
@@ -94,6 +94,7 @@ resource "yandex_compute_instance" "host1" {
     source      = local.ssh_keys_dir                # "/home/devops/.ssh/"
     destination = "/tmp"
 
+    #..блок параметров подключения к ВМ (обязательный)
     connection {
       type = "ssh"
       user = "ubuntu"
@@ -107,26 +108,11 @@ resource "yandex_compute_instance" "host1" {
   ## Копирование файлов #2
   ## Копируем шелл-скрипт из локального хоста на создаваемую ВМ
   provisioner "file" {
-    ##-копируем только 1 скрипт
-    #source      = "scripts/configure_nginx.sh"
-    #destination = "/tmp/configure_nginx.sh"
-    #
-    ##-копируем весь каталог со скриптами
-    #source      = "scripts"
-    #destination = "/home/ubuntu"          # /home/ubuntu/scripts/..скрипты -или- /home/ubuntu/scripts/nginx/ + /home/ubuntu/scripts/artifactory/
-    #..другие пути
-    #source      = "scripts/nginx"
-    #destination = "/home/ubuntu/"         # /home/ubuntu/nginx/..скрипты
-    #..другие пути
-    #source      = "scripts/nginx"
-    #destination = "/home/ubuntu"          # /home/ubuntu/nginx/..скрипты
-    #..другие пути
-    #source      = "scripts/nginx"
-    #destination = "/home/ubuntu/scripts"   # Upload failed: scp: /home/ubuntu/scripts: Not a directory
-    #..другие пути
+    #..копируем скрипты и конфигурационнае файлы на целевую ВМ1
     source      = "scripts/nginx"
-    destination = "/home/ubuntu/scripts/"   # /home/ubuntu/scripts/..скрипты
+    destination = "/home/ubuntu/scripts/"
 
+    #..блок параметров подключения к ВМ (обязательный)
     connection {
       type = "ssh"
       user = "ubuntu"
@@ -137,10 +123,10 @@ resource "yandex_compute_instance" "host1" {
     }
   }
 
-  ## Выполнение команд после того как ВМ будет создана
-  ## *обновляем пакеты системы + устанавливаем python3
+  ## Выполнение команд на целевой ВМ после того как ВМ будет создана
+  ## *выполняем шелл мастер-скрипт который будет запускать другие конфигурационные шелл-скрипты
   provisioner "remote-exec" {
-    ##..обязательный блок подключения к ВМ
+    #..блок параметров подключения к ВМ (обязательный)
     connection {
       type = "ssh"
       user = "ubuntu"
@@ -178,6 +164,106 @@ resource "yandex_compute_instance" "host1" {
   #} ## << "provisioner local-exec"
 
 }
+
+
+##----------------------------------------------------------------------------------------
+##--Создаем VM2 (Ubuntu 22.04, x2 vCPU, x2 GB RAM, x8 GB HDD) -- artifactory хост
+resource "yandex_compute_instance" "host2" {
+  name        = "tomcat"                      # ИЗМЕНЕНО
+  hostname    = "repo"                        # ИЗМЕНЕНО
+  platform_id = "standard-v2"
+  zone        = local.access_zone
+
+  ## Конфигурация виртуальных CPU и RAM
+  resources {
+    cores         = 2
+    memory        = 2
+    core_fraction = 5
+  }
+
+  ## Конфигурация технического обслуживания по расписанию
+  scheduling_policy {
+    preemptible = true
+  }
+
+  ## Конфигурация загрузочного диска (включает образ на основе которого создается ВМ (из Yandex.Cloud Marketplace)
+  boot_disk {
+    initialize_params {
+      image_id    = "fd8clogg1kull9084s9o"
+      type        = "network-hdd"
+      size        = 8
+      description = "Ubuntu 22.04 LTS"
+    }
+  }
+
+  ## Конфигурация сетевого интерфейса
+  network_interface {
+    subnet_id = local.net_sub_id
+    ip_address = "10.0.10.11"                 # ИЗМЕНЕНО
+    nat        = true                         # ИЗМЕНЕНО
+  }
+
+  ## Конфигурация авторизации пользователей на создаваемой ВМ
+  metadata = {
+    serial-port-enable = 0
+    ssh-keys = "ubuntu:${file("${local.ssh_pubkey_path}")}"
+  }
+
+  ## Копирование файлов на создаваемую ВМ (ssh-ключи)
+  provisioner "file" {
+    source      = local.ssh_keys_dir
+    destination = "/tmp"
+
+    #..блок параметров подключения к ВМ (обязательный)
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      host = yandex_compute_instance.host2.network_interface.0.nat_ip_address  # ИЗМЕНЕНО
+      agent = false
+      private_key = file(local.ssh_privkey_path)
+      timeout = "3m"
+    }
+  }
+
+  ## Копирование файлов на создаваемую ВМ (шелл-скрипты установки компонентов и файлы конфигураций)
+  provisioner "file" {
+    #..другие пути
+    source      = "scripts/tomcat"            # ИЗМЕНЕНО
+    destination = "/home/ubuntu/scripts/"
+
+    #..блок параметров подключения к ВМ (обязательный)
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      host = yandex_compute_instance.host2.network_interface.0.nat_ip_address  # ИЗМЕНЕНО
+      agent = false
+      private_key = file(local.ssh_privkey_path)
+      timeout = "4m"
+    }
+  }
+
+  ## Выполнение команд на целевой ВМ после того как ВМ будет создана
+  ## *выполняем шелл мастер-скрипт который будет запускать другие конфигурационные шелл-скрипты
+  provisioner "remote-exec" {
+    ##..обязательный блок подключения к ВМ
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      host = yandex_compute_instance.host2.network_interface.0.nat_ip_address  # ИЗМЕНЕНО
+      agent = false
+      private_key = file(local.ssh_privkey_path)
+      timeout = "4m"
+    }
+    ##..выполняем мастер-скрипт на целевой ВМ2
+    inline = [
+      "chmod +x /home/ubuntu/scripts/configure_00-main.sh",
+      "/home/ubuntu/scripts/configure_00-main.sh"
+    ]
+
+  } ## << "provisioner remote-exec"
+
+}
+
 
 
 ##--В Сервисе "Virtual Private Cloud" (vpc) Создаем Сеть "acme-net" и подсеть "acme-net-sub1"

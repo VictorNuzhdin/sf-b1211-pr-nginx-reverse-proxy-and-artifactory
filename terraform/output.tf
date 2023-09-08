@@ -10,6 +10,18 @@ output "vm1_nginx_internal_ip" {
   sensitive   = false
 }
 
+output "vm2_tomcat_external_ip" {
+  value       = "${yandex_compute_instance.host2.name}: ${yandex_compute_instance.host2.network_interface.0.nat_ip_address}"
+  description = "The Name and public IP address of VM2 instance."
+  sensitive   = false
+}
+
+output "vm2_tomcat_internal_ip" {
+  value       = "${yandex_compute_instance.host2.name}: ${yandex_compute_instance.host2.network_interface.0.ip_address}"
+  description = "The Name and internal IP address of VM2 instance."
+  sensitive   = false
+}
+
 /*=EXAMPLE_OUTPUT:
 
     Apply complete! Resources: 1 added, 0 changed, 0 destroyed.

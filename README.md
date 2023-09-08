@@ -17,6 +17,15 @@ Terraform IaC-конфигурация для создания 2х виртуа�
 ### 02. История изменений (не детальная, сверху - новые)
 
 ```bash
+2023.09.09 :: Добавлены/Изменены скрипты настройки ВМ2:
+    - в проект добавлен конифигурационный блок "terraform/scripts/tomcat" содержащий необходимые скрипты для установки и настройки "Apache Tomcat 9.0.80"
+    - помимо Tomcat производится установка "Oracle Java JDK 17" которая необходима для работы Tomcat (начиная от версии Java 1.8 и новее)
+
+2023.09.08 :: Разработана базовая Terraform конфигурация, которая:
+    - создает ВМ2 (tomcat/repo) на основе Ubuntu 22.04
+    - создает и настраивает на ВМ2 нового пользователя "devops" с авторизацией по ssh-ключу
+    - подготавливает каркасные шелл-скрипты для выполнения прочих настроек ВМ2
+
 2023.09.07 :: Добавлены/Изменены скрипты настройки ВМ1:
     - скрипт "configure_05-ssl-letsencrypt.sh" (выполняет установку LetsEncrypt "certbot" для запроса SSL сертификата)
     - скрипт "requesLetsEncryptCert.sh" (циклически проверяет доступность сайта по доменному имени http://gw.dotspace.ru и запрашивает выпуск LetsEncrypt сертификата)
@@ -31,6 +40,7 @@ Terraform IaC-конфигурация для создания 2х виртуа�
       *при переходе по URL http://gw.dotspace.ru/cicd происходит редирект на https://jenkins.dotspace.ru
 
 2023.09.04 :: Добавлены/Изменены скрипты настройки ВМ1:
+    - в проект добавлен конифигурационный блок "terraform/scripts/nginx" содержащий необходимые скрипты для установки и настройки "Nginx"
     - скрипт "configure_03-nginx.sh"    (первичная установка Nginx)
     - скрипт "configure_66-firewall.sh" (активация и настройка сетевого экрана "ufw" :: открыты порты: 80,443,22)
     - скрипт "configure_77-freedns.sh"  (взаимодействие с API FreeDNS сервиса добавляющего динамический IP-адрес сервера в глобальную DNS)
@@ -54,6 +64,18 @@ $ terraform validate
 $ terraform plan
 $ terraform apply -auto-approve
 
+#..раздельное развертывание ресурсов (на этапе разработки когда нет необходимости уничтожать/создавать все ресурсы сразу)
+#..сначала пересоздаем ВМ1
+$ terraform destroy -target=yandex_compute_instance.host1 -auto-approve && \ 
+terraform validate && \
+terraform plan -target=yandex_compute_instance.host1 && \
+terraform apply -target=yandex_compute_instance.host1 -auto-approve
+#..затем пересоздаем ВМ2
+$ terraform destroy -target=yandex_compute_instance.host2 -auto-approve && \ 
+terraform validate && \
+terraform plan -target=yandex_compute_instance.host2 && \
+terraform apply -target=yandex_compute_instance.host2 -auto-approve
+
 #2
 $ whoami                         ## devops
 $ cd ~ && pwd                    ## /home/devops
@@ -66,22 +88,25 @@ $ ping -c 1 gw.dotspace.ru       ## 64 bytes from 158.160.23.86 (158.160.23.86):
 $ ssh gw.dotspace.ru
 
 #3
-$ curl -s https://gw.dotspace.ru | grep title | awk '{$1=$1;print}'  ## <title>Welcome | gw.dotspace.ru</title>
+$ curl -s https://gw.dotspace.ru | grep title | awk '{$1=$1;print}'        ## <title>Welcome | gw.dotspace.ru</title>
+$ url -s http://$(curl -s 2ip.ru):8080 | grep title | awk '{$1=$1;print}'  ## <title>Apache Tomcat/9.0.80</title>
 
-browser: https://gw.dotspace.ru  ## Welcome to [gw.dotspace.ru] (Reverse-Proxy Gateway) --> View site information - Connection is secure - Certificate is valid
+browser: https://gw.dotspace.ru     ## Welcome to [gw.dotspace.ru] (Reverse-Proxy Gateway) --> View site information - Connection is secure - Certificate is valid
+browser: http://51.250.16.254:8080  ## Apache Tomcat/9.0.80
 
 #4
 $ terraform destroy -auto-approve
+$ terraform destroy -target=yandex_compute_instance.host1 -auto-approve
+$ terraform destroy -target=yandex_compute_instance.host2 -auto-approve
 ```
-
 
 ### 05. Результат работы веб-приложения
 
-Скриншот1: Основная/Домашняя страница Шлюза/ReverseProxy (без https) <br>
+Скриншот1: Nginx Шлюз/ReverseProxy - Основная/Домашняя страница (без https) <br>
 ![screen](_screens/gateway__index-page__v1.png?raw=true)
 <br>
 
-Скриншот2: Основная/Домашняя страница Шлюза/ReverseProxy (с https) <br>
+Скриншот2: Nginx Шлюз/ReverseProxy - Основная/Домашняя страница (с https) <br>
 ![screen](_screens/gateway__index-page__v1_https.png?raw=true)
 <br>
 
@@ -91,10 +116,22 @@ $ terraform destroy -auto-approve
 ![screen](_screens/gateway__self__cert_2.png?raw=true)
 <br>
 
-Скриншот4: Результат перехода по URL /cicd (https-сайт) <br>
+Скриншот4: Tomcat/Artifactory - Основная/Домашняя страница (без https) <br>
+![screen](_screens/repo__tomcat__1_homepage.png?raw=true)
+<br>
+
+Скриншот5: Tomcat/Artifactory - Раздел "Manager App" (без https) <br>
+![screen](_screens/repo__tomcat__2_manager-app.png?raw=true)
+<br>
+
+Скриншот6: Tomcat/Artifactory - Раздел "Host Manager" (без https) <br>
+![screen](_screens/repo__tomcat__3_host-manager.png?raw=true)
+<br>
+
+Скриншот7: Результат перехода по URL /cicd (https-сайт) <br>
 ![screen](_screens/gateway__jenkins.png?raw=true)
 <br>
 
-Скриншот5: HTTP/SSL сертификат для сайта "jenkins.dotspace.ru" выданный SA "Lets Encrypt" <br>
+Скриншот8: HTTP/SSL сертификат для сайта "jenkins.dotspace.ru" выданный SA "Lets Encrypt" <br>
 ![screen](_screens/gateway__jenkins__cert.png?raw=true)
 <br>
