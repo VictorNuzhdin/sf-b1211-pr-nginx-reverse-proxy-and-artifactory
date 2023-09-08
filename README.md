@@ -18,8 +18,8 @@ Terraform IaC-конфигурация для создания 2х виртуа�
 
 ```bash
 2023.09.09 :: Добавлены/Изменены скрипты настройки ВМ2:
-    - в проект добавлен конифигурационный блок "terraform/scripts/tomcat" содержащий необходимые скрипты для установки и настройки "Apache Tomcat 9.0.80"
-    - помимо Tomcat производится установка "Oracle Java JDK 17" которая необходима для работы Tomcat (начиная от версии Java 1.8 и новее)
+    - в проект добавлен конфигурационный блок "terraform/scripts/tomcat" содержащий необходимые скрипты для установки и настройки "Apache Tomcat 9.0.80"
+    - помимо Tomcat, производится установка "Oracle Java JDK 17" которая необходима для работы Tomcat 9 (от версии Java 1.8 и выше)
 
 2023.09.08 :: Разработана базовая Terraform конфигурация, которая:
     - создает ВМ2 (tomcat/repo) на основе Ubuntu 22.04
@@ -64,12 +64,13 @@ $ terraform validate
 $ terraform plan
 $ terraform apply -auto-approve
 
-#..раздельное развертывание ресурсов (на этапе разработки когда нет необходимости уничтожать/создавать все ресурсы сразу)
+#--раздельное развертывание ресурсов (на этапе разработки когда нет необходимости уничтожать/создавать все ресурсы сразу)
 #..сначала пересоздаем ВМ1
 $ terraform destroy -target=yandex_compute_instance.host1 -auto-approve && \ 
 terraform validate && \
 terraform plan -target=yandex_compute_instance.host1 && \
 terraform apply -target=yandex_compute_instance.host1 -auto-approve
+
 #..затем пересоздаем ВМ2
 $ terraform destroy -target=yandex_compute_instance.host2 -auto-approve && \ 
 terraform validate && \
@@ -95,9 +96,9 @@ browser: https://gw.dotspace.ru     ## Welcome to [gw.dotspace.ru] (Reverse-Prox
 browser: http://51.250.16.254:8080  ## Apache Tomcat/9.0.80
 
 #4
-$ terraform destroy -auto-approve
-$ terraform destroy -target=yandex_compute_instance.host1 -auto-approve
-$ terraform destroy -target=yandex_compute_instance.host2 -auto-approve
+$ terraform destroy -auto-approve                                          ## уничтожаются все ресурсы
+$ terraform destroy -target=yandex_compute_instance.host1 -auto-approve    ## уничтожается только ВМ1 (nginx)
+$ terraform destroy -target=yandex_compute_instance.host2 -auto-approve    ## уничтожается только ВМ2 (tomcat)
 ```
 
 ### 05. Результат работы веб-приложения
