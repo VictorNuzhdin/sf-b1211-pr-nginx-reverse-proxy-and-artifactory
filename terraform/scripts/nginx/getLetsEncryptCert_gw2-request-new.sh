@@ -1,17 +1,17 @@
 #!/bin/bash
 
 SCRIPTS_PATH=/home/ubuntu/scripts
-LOG_PATH=$SCRIPTS_PATH/requesLetsEncryptCert.log
+LOG_PATH=$SCRIPTS_PATH/getLetsEncryptCert_gw2-request-new.log
 
 ##--parameters
-WEBSITE_DOMAIN_NAME="gw.dotspace.ru"
+WEBSITE_DOMAIN_NAME="gw2.dotspace.ru"
 WEBSITE_URL="http://$WEBSITE_DOMAIN_NAME"
 WEBSITE_ADMIN_EMAIL=nuzhdin.vicx@yandex.ru
 
 ##--limits
 CHECK_INTERVAL=10
 CHECK_ATTEMPTS=40
-CHECK_TIME_LIMIT=420
+CHECK_TIME_LIMIT=600
 
 echo "DOMAIN_NAME..: $WEBSITE_DOMAIN_NAME"
 echo "MAX_ATTEMPTS.: $CHECK_ATTEMPTS"
@@ -19,15 +19,20 @@ echo "MAX_TIME(sec): $CHECK_TIME_LIMIT"
 echo "INTERVAL(sec): $CHECK_INTERVAL"
 echo ""
 
+##..checking initial website availability | WRONG_METHOD!
+## WEBSITE_STATUS="$(curl -sI $WEBSITE_URL | head -n 1 | cut -d $' ' -f2)"
+
+##..checking initial website availability | CORRECT_METHOD!
+WEBSITE_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" $WEBSITE_URL)
 
 ##--checking website availability (pseudo-infinity loop with time and attempts limits)
 ATTEMPTS_COUNTER=1
 
 ##..if site is online - request LetsEncrypt certificate with "certbot"
 if [ "$WEBSITE_STATUS" = 200 ]; then
-    echo "$WEBSITE_URL :: 200 :: ONLINE ($(host gw.dotspace.ru | awk '{ print $4 }'))"
+    echo "$WEBSITE_URL :: 200 :: ONLINE ($(host $WEBSITE_DOMAIN_NAME | awk '{ print $4 }'))"
     #
-    echo '## Step04 - Obtaining an SSL Certificate..' >> $LOG_PATH
+    echo '## Step05 - Obtaining an SSL Certificate..' >> $LOG_PATH
     sudo certbot --nginx -d $WEBSITE_DOMAIN_NAME --non-interactive --agree-tos -m $WEBSITE_ADMIN_EMAIL > $LOG_PATH
     echo "" >> $LOG_PATH
     ##..checkout (after)
@@ -50,7 +55,7 @@ if [[ "$WEBSITE_STATUS" != 200 ]]; then
     while ((STARTED + $CHECK_TIME_LIMIT > `date +%s`));
     do
         ##..checking website availability
-        WEBSITE_STATUS="$(curl -sI $WEBSITE_URL | head -n 1 | cut -d $' ' -f2)"
+        WEBSITE_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" $WEBSITE_URL)
 
         if [[ "$ATTEMPTS_COUNTER" = "$CHECK_ATTEMPTS" ]]; then
             echo "Max attempts limit occured! exiting.."
@@ -63,7 +68,7 @@ if [[ "$WEBSITE_STATUS" != 200 ]]; then
         if [[ "$WEBSITE_STATUS" = 200 ]]; then
             echo "$WEBSITE_URL :: 200 :: ONLINE ($(host gw.dotspace.ru | awk '{ print $4 }'))"
             #
-            echo '## Step04 - Obtaining an SSL Certificate..' >> $LOG_PATH
+            echo '## Step05 - Obtaining an SSL Certificate..' >> $LOG_PATH
             sudo certbot --nginx -d $WEBSITE_DOMAIN_NAME --non-interactive --agree-tos -m $WEBSITE_ADMIN_EMAIL > $LOG_PATH
             ##..checkout (after)
             ##  *output: <title>Welcome | gw.dotspace.ru</title>

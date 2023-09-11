@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Personal projects portal">
+    <meta name="author" content="nuzhdin.vicx@yandex.ru,nuzhdin.vic@gmail.com">
+
+    <title>Welcome | gw2.dotspace.ru</title>
+
+    <style>
+       .site-info-block {
+            font-family: monospace;
+            font-size: 20px;
+            color: white;
+        }
+		
+       .site-info-block_descr {
+			border: 0px solid yellow; /* debug_borders */
+            font-size: 15px;
+            color: rgba(255,255,255,0.5);
+            margin-left: 132px;
+        }
+		
+       .site-info-block_link {
+            margin-left: 132px;
+        }
+
+        .text-line {
+            display: block;
+        }
+        .data {
+            padding-left: 10px;
+            color: rgb(57,219,72);
+        }
+        a:link {
+            color: RGB(102,204,255);
+            text-decoration: none;
+        }
+        a:visited {
+            color: RGB(102,204,255);
+        }
+        a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column h-100" style="background: #5E42A6">
+
+<!--SHOW site Info with <div>-->
+<div class="site-info-block">
+
+    <span class="text-line">
+        Welcome to [gw2.dotspace.ru] (Reverse-Proxy Gateway)<br>
+        ---
+    </span>
+    <span class="text-line">
+		<span style="display: inline-block; padding-bottom: 10px">*quick_linx</span>
+    </span>
+    <span class="text-line data"></span>
+
+    <span class="text-line">&nbsp;0. domain: 
+        <a href="https://dotspace.ru" target="_blank">https://dotspace.ru</a>
+        <br>
+        <span class="site-info-block_descr">*external resource (root domain)</span>
+    </span>
+
+    <span class="text-line">&nbsp;1. cicd..: 
+        <a href="http://gw2.dotspace.ru/cicd" target="_blank">http://gw2.dotspace.ru/cicd</a>
+        -or-
+        <a href="https://jenkins.dotspace.ru" target="_blank">https://jenkins.dotspace.ru</a>
+        <br>
+        <span class="site-info-block_descr">*external resource (http redirecting)</span>
+    </span>
+
+    <span class="text-line">&nbsp;2. tomcat:
+        <a href="https://gw2.dotspace.ru/tomcat" target="_blank">https://gw2.dotspace.ru/tomcat</a>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/tomcat/docs" target="_blank">https://gw2.dotspace.ru/tomcat/docs</a>
+        </span>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/tomcat/examples" target="_blank">https://gw2.dotspace.ru/tomcat/examples</a>
+        </span>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/tomcat/manager" target="_blank">https://gw2.dotspace.ru/tomcat/manager</a>
+        </span>
+        <br>
+        <span class="site-info-block_descr">*internal resource: [10.0.10.11:8080]</span>
+        <br>
+        <span class="site-info-block_descr">*tomcat as java servlet container</span>
+    </span>
+
+    <span class="text-line">&nbsp;3. repo..:
+        <a href="https://gw2.dotspace.ru/repo" target="_blank">https://gw2.dotspace.ru/repo</a>
+        <br>
+        <span class="site-info-block_descr">*internal resource: [10.0.10.11:8070]</span>
+        <br>
+        <span class="site-info-block_descr">*java webapp as Artifactory emulator</span>
+    </span>
+
+    <span class="text-line">&nbsp;4. apps..: 
+        <a href="https://gw2.dotspace.ru/apps/app1" target="_blank">https://gw2.dotspace.ru/apps/app1</a>
+        <br>
+        <span class="site-info-block_descr">*internal resource: [10.0.10.11:8080/examples/servlets/servlet/HelloWorldExample]</span>
+        <br>
+        <span class="site-info-block_descr">*example java webapp</span>
+    </span>
+
+</div>
+</body>
+</html>

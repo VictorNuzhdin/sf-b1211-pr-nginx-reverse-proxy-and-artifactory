@@ -32,7 +32,7 @@ echo 'CURRENT_SERVER_PUBLIC_IPV4_ADRESS=$(curl -sk https://2ip.ru)' >> $SCRIPTS_
 echo 'API_TOKEN=VjNkhuDLMjno585rXrYPRru7' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 echo '' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 echo '' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
-echo '##..do API request for update "gw.dotspace.ru" DNS-record' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
+echo '##..do API request for update "gw2.dotspace.ru" DNS-record' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 echo 'API_CALL_RESULT=$(curl -sk "https://sync.afraid.org/u/$API_TOKEN/?ip=$CURRENT_SERVER_PUBLIC_IPV4_ADRESS")' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 echo '' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT
 echo '##..log result' >> $SCRIPTS_PATH/$FREEDNS_CLIENT_SCRIPT

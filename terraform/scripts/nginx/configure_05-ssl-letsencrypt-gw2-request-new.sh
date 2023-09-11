@@ -1,13 +1,13 @@
 #!/bin/sh
 
 SCRIPTS_PATH=/home/ubuntu/scripts
-LOG_PATH=$SCRIPTS_PATH/configure_05-ssl-letsencrypt.log
+LOG_PATH=$SCRIPTS_PATH/configure_05-ssl-letsencrypt-gw2-request-new.log
 
-WEBSITE_DOMAIN_NAME="gw.dotspace.ru"
+WEBSITE_DOMAIN_NAME="gw2.dotspace.ru"
 
 
 
-##--STEP#05 :: Configuring HTTPS/SSL with "Lets Encrypt"
+##--STEP#05 :: Configuring HTTPS/SSL with "Lets Encrypt" (requesting NEW certificate)
 ##  https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-22-04
 ##
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] :: Jobs started.." >> $LOG_PATH
@@ -27,7 +27,7 @@ echo "" >> $LOG_PATH
 
 echo '## Step02 - Confirming Nginx Configuration (skipped)..' >> $LOG_PATH
 ##..checkout
-sudo cat /etc/nginx/sites-available/gw.dotspace.ru | grep server_name | awk '{$1=$1;print}' >> $LOG_PATH
+sudo cat /etc/nginx/sites-available/$WEBSITE_DOMAIN_NAME | grep server_name | awk '{$1=$1;print}' >> $LOG_PATH
 echo "" >> $LOG_PATH
 
 echo '## Step03 - Allowing HTTPS through firewall (skipped)..' >> $LOG_PATH
@@ -38,15 +38,15 @@ echo "" >> $LOG_PATH
 
 echo '## Step04 - Obtaining an SSL Certificate (running external script)..' >> $LOG_PATH
 ##..obtaining cert (inline)
-#sudo certbot --nginx -d gw.dotspace.ru --non-interactive --agree-tos -m nuzhdin.vicx@yandex.ru
+#sudo certbot --nginx -d gw2.dotspace.ru --non-interactive --agree-tos -m nuzhdin.vicx@yandex.ru
 #sudo certbot --nginx -d $WEBSITE_DOMAIN_NAME --non-interactive --agree-tos -m $WEBSITE_ADMIN_EMAIL
 #
 ##..obtaining cert (with script)
-chmod +x $SCRIPTS_PATH/requesLetsEncryptCert.sh
-sudo bash $SCRIPTS_PATH/requesLetsEncryptCert.sh
+chmod +x $SCRIPTS_PATH/getLetsEncryptCert_gw2-request-new.sh
+sudo bash $SCRIPTS_PATH/getLetsEncryptCert_gw2-request-new.sh
 #
 ##..checkout (after)
-#curl -s https://gw.dotspace.ru | grep title | awk '{$1=$1;print}'			## <title>Welcome | gw.dotspace.ru</title>
+#curl -s https://gw2.dotspace.ru | grep title | awk '{$1=$1;print}'			## <title>Welcome | gw.dotspace.ru</title>
 ## log2console
 echo ""
 echo "https://$WEBSITE_DOMAIN_NAME"

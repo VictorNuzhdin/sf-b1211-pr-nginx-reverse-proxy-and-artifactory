@@ -24,8 +24,19 @@ sudo bash $SCRIPTS_PATH/configure_03-nginx.sh
 chmod +x $SCRIPTS_PATH/configure_04-freedns.sh
 sudo bash $SCRIPTS_PATH/configure_04-freedns.sh
 #
-chmod +x $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
-sudo bash $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
+#..request NEW ssl certificate
+#chmod +x $SCRIPTS_PATH/configure_05-ssl-letsencrypt-gw2-request-new.sh
+#sudo bash $SCRIPTS_PATH/configure_05-ssl-letsencrypt-gw2-request-new.sh
+#
+#..reuse OLD ssl certificate
+chmod +x $SCRIPTS_PATH/configure_05-ssl-letsencrypt-gw2-reuse-old.sh
+sudo bash $SCRIPTS_PATH/configure_05-ssl-letsencrypt-gw2-reuse-old.sh
+#
+#chmod +x $SCRIPTS_PATH/configure_06-nginx-proxy-gw1.sh
+#sudo bash $SCRIPTS_PATH/configure_06-nginx-proxy-gw1.sh
+#
+chmod +x $SCRIPTS_PATH/configure_06-nginx-proxy-gw2.sh
+sudo bash $SCRIPTS_PATH/configure_06-nginx-proxy-gw2.sh
 #
 chmod +x $SCRIPTS_PATH/configure_66-firewall.sh
 sudo bash $SCRIPTS_PATH/configure_66-firewall.sh

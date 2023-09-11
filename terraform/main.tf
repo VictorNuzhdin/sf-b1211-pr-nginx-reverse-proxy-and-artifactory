@@ -47,7 +47,8 @@ provider "yandex" {
 ##--Создаем VM1 (Ubuntu 22.04, x2 vCPU, x2 GB RAM, x8 GB HDD) -- nginx хост
 resource "yandex_compute_instance" "host1" {
   name        = "nginx"             # имя ВМ;
-  hostname    = "gw"                # сетевое имя ВМ (имя хоста);
+  #hostname   = "gw"                # сетевое имя ВМ (имя хоста);
+  hostname    = "gw2"
   platform_id = "standard-v2"       # семейство облачной платформы ВМ (влияет на тип и параметры доступного для выбора CPU);
   zone        = local.access_zone   # зона доступности (размещение ВМ в конкретном датацентре);
 
