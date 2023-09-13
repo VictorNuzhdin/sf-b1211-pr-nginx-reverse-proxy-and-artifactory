@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>Fake JFrog Platform Servlet</display-name>
+    <description>
+        This web application is a stub for JFrog Platform
+        was developed as a part of an educational project "sf-b1211-pr".
+    </description>
+
+    <servlet>
+        <servlet-name>FakeJFrogServlet</servlet-name>
+        <servlet-class>mypkg.FakeJFrog</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FakeJFrogServlet</servlet-name>
+        <url-pattern>/servlet</url-pattern>
+    </servlet-mapping>
+
+</web-app>

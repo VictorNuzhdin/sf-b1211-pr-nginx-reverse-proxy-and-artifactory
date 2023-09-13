@@ -48,15 +48,24 @@ server {
         rewrite ^/docs/(.*)$ https://gw2.dotspace.ru/tomcat/docs/$1 redirect;
     }
 
-    ## Redirects #4 to internal Tomcat Java webapp
+    ## Redirects #3 to internal Tomcat Java webapp
     ## *3.0
     location /apps/app1/ {
         ##..v1
         #include proxy_params;
         #proxy_pass http://tomcat/examples/servlets/HelloWorldExample;
         #
-        ##..v2 
+        ##..v2
         proxy_pass http://10.0.10.11:8080/examples/servlets/servlet/HelloWorldExample;
+        #
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+    ## *3.1
+    location /repo/ {
+        #
+        proxy_pass http://10.0.10.11:8080/repo/servlet;
         #
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;

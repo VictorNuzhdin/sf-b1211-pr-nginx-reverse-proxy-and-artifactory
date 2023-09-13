@@ -1,0 +1,253 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+}
+
+/* Create two unequal columns that floats next to each other */
+.column {
+    /*border: 1px solid red;*/  /* debug borders */
+    float: left;
+    height: 848px;
+}
+.left {
+    width: 470px;
+    background: url("../images/left.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+}
+.right {
+    width: calc(100% - 470px);
+    background-color: white;
+}
+.right-bottom {
+    /*border: 1px solid red;*/  /* debug borders */
+    /*position: absolute;*/
+    /*bottom: 50px;*/
+    /*width: calc(100% - 470px);*/
+	/*position: fixed;*/
+	/*bottom: 0;*/
+    position: sticky;
+    height: 18px;
+    top: calc(100vh - 18px);
+
+}
+.java-msg {
+    color: blue;
+	float: right;
+	padding-right: 6px;
+    font-family: consolas;
+    font-size: 12px;
+	color: RGB(128,132,148);
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.row {
+    margin-top: 45px;
+}
+
+.greet-text {
+    /*border: 1px solid red;*/  /* debug borders */
+    display: inline-block;
+    width: 100%;
+    margin-top: 340px;
+    margin-bottom: 10px;
+    color: RGB(63,190,70);
+    text-align: center;
+    font-family: verdana;
+    font-size: 27px;
+    font-weight: bold;
+}
+.greet-text-descr {
+    /*border: 1px solid red;*/  /* debug borders */
+    display: inline-block;
+    width: 100%;
+    color: RGB(128,132,148);
+    text-align: center;
+    font-family: verdana;
+    font-size: 15px;
+    font-weight: bold;
+}
+.greet-text-descr p {
+    padding-bottom: 5px;
+}
+
+
+/* Responsive layout - when the screen is less than 1910px wide */
+@media screen and (max-width: 1910px) {
+    .left {
+        width: 443px;
+    }
+    .right {
+        width: calc(100% - 443px);
+    }
+    .column {
+        height: 800px;
+    }
+    .row {
+        margin-top: 55px;
+    }
+    
+    .greet-text {
+        margin-top: 340px;
+        font-size: 24px;
+    }
+    .greet-text-descr {
+        font-size: 13px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 1800px wide */
+@media screen and (max-width: 1800px) {
+    .left {
+        width: 420px;
+    }
+    .right {
+        width: calc(100% - 420px);
+    }
+    .column {
+        height: 758px;
+    }
+    .row {
+        margin-top: 80px;
+    }
+    
+    .greet-text {
+        margin-top: 340px;
+        font-size: 22px;
+    }
+    .greet-text-descr {
+        font-size: 12px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 1000px wide */
+@media screen and (max-width: 1000px) {
+    .left {
+        width: 400px;
+    }
+    .right {
+        width: calc(100% - 400px);
+    }
+    .column {
+        height: 722px;
+    }
+    .row {
+        margin-top: 90px;
+    }
+    
+    .greet-text {
+        margin-top: 320px;
+        font-size: 20px;
+    }
+    .greet-text-descr {
+        font-size: 12px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 850px wide */
+@media screen and (max-width: 850px) {
+    .left {
+        width: 350px;
+    }
+    .right {
+        width: calc(100% - 350px);
+    }
+    .column {
+        height: 630px;
+    }
+    .row {
+        margin-top: 130px;
+    }
+
+    .greet-text {
+        margin-top: 280px;
+        font-size: 20px;
+    }
+    .greet-text-descr {
+        font-size: 12px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 700px wide */
+@media screen and (max-width: 700px) {
+    .left {
+        width: 300px;
+    }
+    .right {
+        width: calc(100% - 300px);
+    }
+    .column {
+        height: 540px;
+    }
+    .row {
+        margin-top: 180px;
+    }
+    
+    .greet-text {
+        margin-top: 220px;
+        font-size: 19px;
+    }
+    .greet-text-descr {
+        font-size: 11px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 600px wide */
+@media screen and (max-width: 600px) {
+
+    .left {
+        width: 250px;
+    }
+    .right {
+        width: calc(100% - 250px);
+    }
+    .column {
+        height: 450px;
+    }
+    .row {
+        margin-top: 200px;
+    }
+    
+    .greet-text {
+        margin-top: 160px;
+        font-size: 19px;
+    }
+    .greet-text-descr {
+        font-size: 11px;
+    }
+}
+
+/* Responsive layout - when the screen is less than 520px wide */
+@media screen and (max-width: 520px) {
+
+    .left {
+        width: 210px;
+    }
+    .right {
+        width: calc(100% - 210px);
+    }
+    .column {
+        height: 379px;
+    }
+    .row {
+        margin-top: 240px;
+    }
+
+    .greet-text {
+        margin-top: 130px;
+        font-size: 18px;
+    }
+    .greet-text-descr {
+        font-size: 11px;
+    }
+}

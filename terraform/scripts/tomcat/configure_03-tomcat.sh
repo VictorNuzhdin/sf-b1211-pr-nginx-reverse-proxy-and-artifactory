@@ -15,9 +15,9 @@ echo "" >> $LOG_PATH
 
 
 echo '## Step00 - Update System packages list..' >> $LOG_PATH
-sudo apt update >> $LOG_PATH
+##--DISABLED--## sudo apt update
+##--DISABLED--## sudo DEBIAN_FRONTEND=noninteractive apt update --assume-yes
 echo "" >> $LOG_PATH
-
 
 echo '## Step01 - Installing Java SDK (17)..'
 echo '## Step01 - Installing Java SDK (17)..' >> $LOG_PATH
@@ -26,7 +26,11 @@ echo '## Step01 - Installing Java SDK (17)..' >> $LOG_PATH
 #sudo apt install -y openjdk-17-jre >> $LOG_PATH
 #
 ##..installing Oracle JDK
-sudo apt install -y libc6-x32 libc6-i386 >> $LOG_PATH
+##--DISABLED--## sudo DEBIAN_FRONTEND=noninteractive apt install -y --assume-yes libc6-x32 libc6-i386
+#sudo apt install -y libc6-x32 libc6-i386
+#sudo apt install -y --assume-yes libc6-x32 libc6-i386
+sudo DEBIAN_FRONTEND=noninteractive apt install -y libc6-x32 libc6-i386
+## ??? ТУТ_ПРОИСХОДИЛА_ХРЕНЬ_КОТОРОЙ_РАНЬШЕ_НЕ_БЫЛО_В_ИТОГЕ_ВСЕ_ВИСЕЛО (требовалось_интерактивное_действие)
 wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb
 sudo dpkg -i jdk-17_linux-x64_bin.deb
 sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-17-oracle-x64/bin/java 1
@@ -147,11 +151,6 @@ echo ""
 #echo "" >> $LOG_PATH
 sudo systemctl status tomcat | grep Active | awk '{$1=$1;print}' >> $LOG_PATH
 echo "" >> $LOG_PATH
-
-
-#echo '## Step66 - Deploying webApp..' >> $LOG_PATH
-##..
-#echo "" >> $LOG_PATH
 
 
 #echo '## Step77 - Checkout Installation (disabled)..' >> $LOG_PATH

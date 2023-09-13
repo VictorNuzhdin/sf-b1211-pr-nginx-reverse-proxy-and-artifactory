@@ -27,6 +27,12 @@ sudo bash $SCRIPTS_PATH/configure_03-tomcat.sh
 #chmod +x $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
 #sudo bash $SCRIPTS_PATH/configure_05-ssl-letsencrypt.sh
 #
+#chmod +x $SCRIPTS_PATH/configure_06-tomcat-postconfig.sh
+#sudo bash $SCRIPTS_PATH/configure_06-tomcat-postconfig.sh
+#
+chmod +x $SCRIPTS_PATH/configure_07-tomcat-deploy-webapp.sh
+sudo bash $SCRIPTS_PATH/configure_07-tomcat-deploy-webapp.sh
+#
 chmod +x $SCRIPTS_PATH/configure_66-firewall.sh
 sudo bash $SCRIPTS_PATH/configure_66-firewall.sh
 #

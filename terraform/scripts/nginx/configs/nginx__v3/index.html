@@ -10,20 +10,25 @@
     <title>Welcome | gw2.dotspace.ru</title>
 
     <style>
-       .site-info-block {
+        .site-info-block {
             font-family: monospace;
             font-size: 20px;
             color: white;
         }
-		
-       .site-info-block_descr {
-			border: 0px solid yellow; /* debug_borders */
+
+        .site-info-block_descr {
+            /*border: 0px solid yellow;*/ /* debug_borders */
             font-size: 15px;
             color: rgba(255,255,255,0.5);
             margin-left: 132px;
         }
-		
-       .site-info-block_link {
+
+        .site-info-block_descr2 {
+            font-size: 15px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .site-info-block_link {
             margin-left: 132px;
         }
 
@@ -58,17 +63,17 @@
         ---
     </span>
     <span class="text-line">
-		<span style="display: inline-block; padding-bottom: 10px">*quick_linx</span>
+                <span style="display: inline-block; padding-bottom: 10px">*quick_linx</span>
     </span>
     <span class="text-line data"></span>
 
-    <span class="text-line">&nbsp;0. domain: 
+    <span class="text-line">&nbsp;0. domain:
         <a href="https://dotspace.ru" target="_blank">https://dotspace.ru</a>
         <br>
         <span class="site-info-block_descr">*external resource (root domain)</span>
     </span>
 
-    <span class="text-line">&nbsp;1. cicd..: 
+    <span class="text-line">&nbsp;1. cicd..:
         <a href="http://gw2.dotspace.ru/cicd" target="_blank">http://gw2.dotspace.ru/cicd</a>
         -or-
         <a href="https://jenkins.dotspace.ru" target="_blank">https://jenkins.dotspace.ru</a>
@@ -96,20 +101,36 @@
         <span class="site-info-block_descr">*tomcat as java servlet container</span>
     </span>
 
-    <span class="text-line">&nbsp;3. repo..:
-        <a href="https://gw2.dotspace.ru/repo" target="_blank">https://gw2.dotspace.ru/repo</a>
-        <br>
-        <span class="site-info-block_descr">*internal resource: [10.0.10.11:8070]</span>
-        <br>
-        <span class="site-info-block_descr">*java webapp as Artifactory emulator</span>
-    </span>
-
-    <span class="text-line">&nbsp;4. apps..: 
+    <span class="text-line">&nbsp;3. apps..:
         <a href="https://gw2.dotspace.ru/apps/app1" target="_blank">https://gw2.dotspace.ru/apps/app1</a>
         <br>
         <span class="site-info-block_descr">*internal resource: [10.0.10.11:8080/examples/servlets/servlet/HelloWorldExample]</span>
         <br>
         <span class="site-info-block_descr">*example java webapp</span>
+    </span>
+
+    <span class="text-line">&nbsp;4. repo..:
+        <a href="https://gw2.dotspace.ru/tomcat/repo/" target="_blank">https://gw2.dotspace.ru/tomcat/repo</a>
+        <span class="site-info-block_descr2">(index.html)</span>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/tomcat/repo/welcome.jsp" target="_blank">https://gw2.dotspace.ru/tomcat/repo/welcome</a>
+            <span class="site-info-block_descr2">(welcome.jsp)</span>
+        </span>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/tomcat/repo/servlet" target="_blank">https://gw2.dotspace.ru/tomcat/repo/servlet</a>
+            <span class="site-info-block_descr2">(FakeJFrog.class)</span>
+        </span>
+        <br>
+        <span class="site-info-block_link">
+            <a href="https://gw2.dotspace.ru/repo" target="_blank">https://gw2.dotspace.ru/repo</a>
+            <span class="site-info-block_descr2">(FakeJFrog.class)</span>
+        </span>
+        <br>
+        <span class="site-info-block_descr">*internal resource: [10.0.10.11:8080/repo] (/opt/tomcat/webapps/repo)</span>
+        <br>
+        <span class="site-info-block_descr">*java webapp as Artifactory emulator</span>
     </span>
 
 </div>
